@@ -14,7 +14,7 @@ namespace StringCalculatorKata
                 return 0;
             }
 
-            var delimiter = new char[] { ',', '\n' }.ToList();
+            var delimiter = new List<char> { ',', '\n' };
             if (numbers.StartsWith("//"))
             {
                 delimiter.Add(char.Parse(numbers.Substring(2, 1)));
@@ -27,13 +27,13 @@ namespace StringCalculatorKata
             {
                 HandleNegativeNumbers(negatives);
             }
-            return stringNumber.Where(number => int.Parse(number) <= 1000).Sum(number => int.Parse(number));
+            return stringNumber.Select(number => int.Parse(number)).Where(number => number <= 1000).Sum();
         }
 
         private static void HandleNegativeNumbers(IEnumerable<string> negatives)
         {
-                var negativesNumbers = string.Join(" ", negatives.ToArray());
-                throw new Exception($"Negatives not allowed {negativesNumbers}");
+            var allNegatives = string.Join(" ", negatives.ToArray());
+            throw new Exception($"Negatives not allowed {allNegatives}");
         }
     }
 }
