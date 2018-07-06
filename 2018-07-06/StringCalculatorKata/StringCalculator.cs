@@ -9,27 +9,21 @@ namespace StringCalculatorKata
 
         public int Add(string numbers)
         {
-            if (string.IsNullOrWhiteSpace(numbers))
+            if (!string.IsNullOrWhiteSpace(numbers))
             {
-                return 0;
+                var delimiter = new List<string> { ",", "\n" };
+
+                if (numbers.StartsWith("//"))
+                {
+                    numbers = ExtractValidNumbers(numbers, delimiter);
+                }
+
+                var listOfNumbers = numbers.Split(delimiter.ToArray(), StringSplitOptions.None).Select(n => int.Parse(n));
+                HandleNegativeNumbers(listOfNumbers);
+
+                return listOfNumbers.Where(number => number <= 1000).Sum();
             }
-            var delimiter = new List<string> { ",", "\n" };
-
-            if (numbers.StartsWith("//"))
-            {
-                numbers = ExtractValidNumbers(numbers, delimiter);
-            }
-
-            var listOfNumbers = numbers.Split(delimiter.ToArray(), StringSplitOptions.None).Select(n => int.Parse(n));
-
-            if (listOfNumbers.Any(n => n < 0))
-            {
-                var negatives = listOfNumbers.Where(number => number < 0);
-
-                HandleNegativeNumbers(negatives);
-            }
-
-            return listOfNumbers.Where(number => number <= 1000).Sum();
+            return 0;
         }
 
         private static string ExtractValidNumbers(string numbers, List<string> delimiter)
@@ -48,10 +42,14 @@ namespace StringCalculatorKata
             return numbers;
         }
 
-        private static void HandleNegativeNumbers(IEnumerable<int> negatives)
+        private static void HandleNegativeNumbers(IEnumerable<int> listOfNumbers)
         {
-            var allNegatives = string.Join(" ", negatives.ToArray());
-            throw new Exception($"Negatives not allowed {allNegatives}");
+            var negatives = listOfNumbers.Where(number => number < 0);
+            if (negatives.Count() > 0)
+            {
+                var allNegatives = string.Join(" ", negatives.ToArray());
+                throw new Exception($"Negatives not allowed {allNegatives}");
+            }
         }
     }
 }
