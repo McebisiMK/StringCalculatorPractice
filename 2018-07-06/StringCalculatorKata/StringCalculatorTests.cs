@@ -82,10 +82,10 @@ namespace StringCalculatorKata
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("-100", "Negatives not allowed -100")]
-        [TestCase("-89,100,-56", "Negatives not allowed -89 -56")]
-        [TestCase("//%\n-8%9%-52,75", "Negatives not allowed -8 -52")]
-        public void Add_GivenStringOfNumbersContainingNegativeNumbers_ShouldThrowExceptionAllNegativeNumbersThatWerePassed(string numbers, string expected)
+        [TestCase("-100", "-100")]
+        [TestCase("-89,100,-56", "-89 -56")]
+        [TestCase("//%\n-8%9%-52,75", "-8 -52")]
+        public void Add_GivenStringOfNumbersContainingNegativeNumbers_ShouldThrowExceptionAllNegativeNumbersThatWerePassed(string numbers, string negatives)
         {
             //-------------------Arrange--------------------
             var stringCalculator = CreateStringCalculator();
@@ -94,6 +94,7 @@ namespace StringCalculatorKata
             var actual = Assert.Throws<Exception>(() => stringCalculator.Add(numbers));
 
             //-------------------Assert---------------------
+            var expected = $"Negatives not allowed {negatives}";
             Assert.AreEqual(expected, actual.Message);
         }
 
