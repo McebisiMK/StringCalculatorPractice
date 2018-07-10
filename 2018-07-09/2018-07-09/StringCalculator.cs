@@ -10,13 +10,9 @@ namespace _2018_07_09
         {
             if (!string.IsNullOrWhiteSpace(numbers))
             {
-                var delimiter = new List<string> { ",", "\n" };
-                if (numbers.StartsWith("//"))
-                {
-                    numbers = ExtractNumbers(numbers, delimiter);
-                }
-                var listOfNumbers = numbers.Split(delimiter.ToArray(),StringSplitOptions.RemoveEmptyEntries)
-                                           .Select(number => int.Parse(number));
+                var delimiters = new List<string> { ",", "\n" };
+                numbers = GetValidString(numbers, delimiters);
+                var listOfNumbers = GetSplittedList(numbers, delimiters);
                 HandleNegatives(listOfNumbers);
 
                 return listOfNumbers.Where(number => number <= 1000).Sum();
@@ -25,18 +21,28 @@ namespace _2018_07_09
             return 0;
         }
 
-        private string ExtractNumbers(string numbers, List<string> delimiter)
+        private string GetValidString(string numbers, List<string> delimiters)
         {
             if (numbers.Contains("["))
             {
                 var listOfDelimiters = numbers.Substring(3, numbers.LastIndexOf("]") - 3).Split("][".ToArray());
-                delimiter.AddRange(listOfDelimiters);
+                delimiters.AddRange(listOfDelimiters);
 
                 return numbers.Substring(numbers.LastIndexOf("]") + 1);
             }
-            delimiter.Add(numbers[2].ToString());
+            else if (numbers.StartsWith("//") && numbers.Contains("[") == false)
+            {
+                delimiters.Add(numbers[2].ToString());
 
-            return numbers.Substring(3);
+                return numbers.Substring(3);
+            }
+            return numbers;
+        }
+
+        private static IEnumerable<int> GetSplittedList(string numbers, List<string> delimiters)
+        {
+            return numbers.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+                                                       .Select(number => int.Parse(number));
         }
 
         private void HandleNegatives(IEnumerable<int> listOfNumbers)
