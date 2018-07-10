@@ -17,23 +17,21 @@ namespace _2018_07_09
 
                 return listOfNumbers.Where(number => number <= 1000).Sum();
             }
-
             return 0;
         }
 
         private string GetValidString(string numbers, List<string> delimiters)
         {
-            if (numbers.Contains("["))
+            if (numbers.StartsWith("//"))
             {
-                var listOfDelimiters = numbers.Substring(3, numbers.LastIndexOf("]") - 3).Split("][".ToArray());
-                delimiters.AddRange(listOfDelimiters);
+                if (numbers.Contains("["))
+                {
+                    var listOfDelimiters = numbers.Substring(3, numbers.LastIndexOf("]") - 3).Split("][".ToArray());
+                    delimiters.AddRange(listOfDelimiters);
 
-                return numbers.Substring(numbers.LastIndexOf("]") + 1);
-            }
-            else if (numbers.StartsWith("//") && numbers.Contains("[") == false)
-            {
+                    return numbers.Substring(numbers.LastIndexOf("]") + 1);
+                }
                 delimiters.Add(numbers[2].ToString());
-
                 return numbers.Substring(3);
             }
             return numbers;
@@ -41,8 +39,7 @@ namespace _2018_07_09
 
         private static IEnumerable<int> GetSplittedList(string numbers, List<string> delimiters)
         {
-            return numbers.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries)
-                                                       .Select(number => int.Parse(number));
+            return numbers.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries).Select(number => int.Parse(number));
         }
 
         private void HandleNegatives(IEnumerable<int> listOfNumbers)
