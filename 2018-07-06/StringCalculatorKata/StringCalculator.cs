@@ -6,7 +6,6 @@ namespace StringCalculatorKata
 {
     public class StringCalculator
     {
-
         public int Add(string numbers)
         {
             if (!string.IsNullOrWhiteSpace(numbers))
