@@ -22,9 +22,10 @@ namespace _2018_07_26
 
         private string GetNumberWithDelimiter(string numbers, List<string> delimiters)
         {
+            var numberWithDelimiter = numbers;
             if (numbers.StartsWith("//"))
             {
-                var numberWithDelimiter = numbers.Substring(numbers.IndexOf("\n"));
+                 numberWithDelimiter = numbers.Substring(numbers.IndexOf("\n"));
                 if (numbers.Contains("["))
                 {
                     var startIndex = numbers.IndexOf("[");
@@ -35,10 +36,8 @@ namespace _2018_07_26
                     return numberWithDelimiter;
                 }
                 delimiters.Add(numbers.Substring(2, 1));
-
-                return numberWithDelimiter;
             }
-            return numbers;
+            return numberWithDelimiter;
         }
 
         private IEnumerable<int> GetSplitted(string numbers, List<string> delimiters)
